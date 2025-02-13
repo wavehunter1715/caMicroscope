@@ -20,30 +20,14 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-
-      # Install Dependencies
       - run: npm install
       - run: npm install -g http-server
-
-      # Install Google Chrome
-      - name: Install Google Chrome
-        run: |
-          sudo apt update
-          sudo apt install -y google-chrome-stable
-
-      # Install the matching ChromeDriver version
-      - name: Install specific version of ChromeDriver
-        run: |
-          CHROME_VERSION=$(google-chrome --version | grep -oP '[0-9]+\.[0-9]+\.[0-9]+')
-          npm install -g chromedriver@$CHROME_VERSION
-
-      # Start local server
       - run: npm run build --if-present
       - run: http-server -s &
-
-      # Run Axe tests with ChromeDriver
+      - name: Install specific version of ChromeDriver
+        run: npm install -g chromedriver@125
       - name: Run axe
         run: |
           npm install -g @axe-core/cli
-          sleep 90  # Allow server to start
+          sleep 90
           axe http://127.0.0.1:8080 --chromedriver-path $(npm root -g)/chromedriver/bin/chromedriver --exit
