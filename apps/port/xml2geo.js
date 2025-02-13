@@ -36,7 +36,7 @@ function xml2geo() {
 
     let vertices = i.getElementsByTagName('Vertex');
     let coordinates = [];
-    let minX = 99e99, maxX = 0, minY = 99e99, maxY = 0;
+    let minX = 99e99; let maxX = 0; let minY = 99e99; let maxY = 0;
 
     for (let j of vertices) {
       let x = parseFloat(j.getAttribute('X'));
@@ -73,7 +73,7 @@ function xml2geo() {
       'bound': {
         'type': 'BoundingBox',
         'coordinates': [[minX, minY], [maxX, maxY]],
-      }
+      },
     };
 
     features.push(feature);
@@ -88,5 +88,4 @@ function xml2geo() {
   output['provenance']['analysis']['execution_id'] = document.getElementById('annot_name').value;
 
   document.getElementById('output').textContent = JSON.stringify(output);
-
 }
